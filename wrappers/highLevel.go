@@ -1,11 +1,16 @@
 package wrappers
 
+import "errors"
+
 // Decrypt decrypts the provided byte slice using the provided passphrase.
-func Decrypt(encBytes []byte, passphrase []byte) ([]byte, error) {
-	var err error = nil
+func Decrypt(encBytes, passphrase []byte) ([]byte, error) {
+	if len(encBytes) < saltSize1 {
+		return nil, errors.New("High-level decrypt: Encrypted data is too short (invalid Argon2 salt)")
+	}
 	salt1 := encBytes[:saltSize1]
 	encBytes = encBytes[saltSize1:]
 	key1 := derivePrimaryKey(passphrase, salt1)
+	var err error
 	encBytes, err = decryptCha(encBytes, key1)
 	if err != nil {
 		return nil, err
@@ -18,7 +23,7 @@ func Decrypt(encBytes []byte, passphrase []byte) ([]byte, error) {
 }
 
 // Encrypt encrypts the provided byte slice using the provided passphrase.
-func Encrypt(decBytes []byte, passphrase []byte) []byte {
+func Encrypt(decBytes, passphrase []byte) []byte {
 	salt1 := getRandomBytes(saltSize1)
 	salt2AES := getRandomBytes(saltSize2)
 	salt2Cha := getRandomBytes(saltSize2)
