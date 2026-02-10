@@ -66,7 +66,7 @@ func main() {
 			if daemon.IsOpen() {
 				decBytes = daemon.GetDec(encBytes)
 			} else {
-				decBytes, err = wrappers.Decrypt(encBytes, front.InputHidden("Enter RCW passphrase:"))
+				decBytes, err = wrappers.DecryptAndZeroizePassphrase(encBytes, front.InputHidden("Enter RCW passphrase:"))
 				if err != nil {
 					fmt.Println(err)
 					return
@@ -91,7 +91,7 @@ func main() {
 		if os.Args[1] == "init" {
 			// create sanity check file
 			// rcw init <passwd>
-			err := wrappers.GenSanityCheck(sanityFile, []byte(os.Args[2]))
+			err := wrappers.GenSanityCheckAndZeroizePassphrase(sanityFile, []byte(os.Args[2]))
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -102,15 +102,15 @@ func main() {
 			decBytes := []byte(os.Args[2])
 			var encBytes []byte
 			if daemon.IsOpen() {
-				encBytes = daemon.GetEnc(decBytes)
+				encBytes = daemon.GetEncAndZeroizeDecBytes(decBytes)
 			} else {
 				passphrase := front.InputHidden("Enter RCW passphrase: ")
-				err := wrappers.RunSanityCheck(sanityFile, passphrase)
+				err := wrappers.RunSanityCheck(sanityFile, append([]byte{}, passphrase...)) // pass new slice to avoid zeroizing passphrase)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
-				encBytes = wrappers.Encrypt(decBytes, passphrase)
+				encBytes = wrappers.EncryptAndZeroizeDecBytesAndPassphrase(decBytes, passphrase)
 			}
 			os.WriteFile(outputFile, encBytes, 0600)
 			return

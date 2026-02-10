@@ -4,6 +4,8 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"errors"
+
+	"github.com/rwinkhart/go-boilerplate/security"
 )
 
 const (
@@ -22,6 +24,7 @@ func encryptAES(decBytes, key2, salt2 []byte) []byte {
 
 	// generate a random nonce
 	nonce := getRandomBytes(nonceSizeAES)
+	defer security.ZeroizeBytes(nonce)
 
 	// encrypt the data
 	ciphertext := aesGCM.Seal(nil, nonce, decBytes, nil)
@@ -46,6 +49,7 @@ func decryptAES(encBytes, key1 []byte) ([]byte, error) {
 
 	// create AES-256 cipher
 	block, _ := aes.NewCipher(key2)
+	security.ZeroizeBytes(key2)
 
 	// create GCM mode
 	aesGCM, _ := cipher.NewGCM(block)

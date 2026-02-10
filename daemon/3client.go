@@ -4,6 +4,8 @@ import (
 	"log"
 	"net"
 	"net/rpc"
+
+	"github.com/rwinkhart/go-boilerplate/security"
 )
 
 // GetDec requests the RCW daemon to decrypt the given data.
@@ -21,17 +23,19 @@ func GetDec(encBytes []byte) []byte {
 	return decBytes
 }
 
-// GetEnc requests the RCW daemon to encrypt the given data.
+// GetEncAndZeroizeDecBytes requests the RCW daemon to encrypt the given data.
 // It returns the encrypted data.
-func GetEnc(decBytes []byte) []byte {
+func GetEncAndZeroizeDecBytes(decBytes []byte) []byte {
 	conn, client := connectToDaemon()
 	defer conn.Close()
 	defer client.Close()
 
 	// request encBytes from the RPC server
 	var encBytes []byte
-	if err := client.Call("RCWService.EncryptRequest", decBytes, &encBytes); err != nil {
-		log.Fatalf("Error calling RCWService.EncryptRequest: %v", err)
+	err := client.Call("RCWService.EncryptRequestAndZeroizeDecBytes", decBytes, &encBytes)
+	security.ZeroizeBytes(decBytes)
+	if err != nil {
+		log.Fatalf("Error calling RCWService.EncryptRequestAndZeroizeDecBytes: %v", err)
 	}
 	return encBytes
 }

@@ -3,6 +3,7 @@ package wrappers
 import (
 	"errors"
 
+	"github.com/rwinkhart/go-boilerplate/security"
 	"golang.org/x/crypto/chacha20poly1305"
 )
 
@@ -17,6 +18,7 @@ func encryptCha(decBytes, key2, salt2 []byte) []byte {
 
 	// generate a random nonce
 	nonce := getRandomBytes(nonceSizeCha)
+	defer security.ZeroizeBytes(nonce)
 
 	// encrypt the data
 	ciphertext := stream.Seal(nil, nonce, decBytes, nil)
@@ -41,6 +43,7 @@ func decryptCha(encBytes, key1 []byte) ([]byte, error) {
 
 	// create ChaCha20-Poly1305 cipher
 	stream, _ := chacha20poly1305.NewX(key2)
+	security.ZeroizeBytes(key2)
 
 	// decrypt the data
 	plaintext, err := stream.Open(nil, nonce, ciphertext, nil)

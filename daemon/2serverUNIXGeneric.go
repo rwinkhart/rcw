@@ -13,7 +13,7 @@ import (
 	"syscall"
 	"time"
 
-	peercred "github.com/rwinkhart/peercred-mini"
+	"github.com/rwinkhart/peercred-mini"
 )
 
 // Start is the entry point for the RPC server responsible for

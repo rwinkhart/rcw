@@ -20,17 +20,17 @@ type RCWService struct{}
 // the global passphrase and returns the decrypted data
 func (h *RCWService) DecryptRequest(encBytes []byte, reply *[]byte) error {
 	var err error
-	*reply, err = wrappers.Decrypt(encBytes, globalPassphrase)
+	*reply, err = wrappers.DecryptAndZeroizePassphrase(encBytes, append([]byte{}, globalPassphrase...)) // pass new slice to avoid zeroizing cached passphrase)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// EncryptRequest is the RPC method that encrypts the incoming data using
+// EncryptRequestAndZeroizeDecBytes is the RPC method that encrypts the incoming data using
 // the global passphrase and returns the encrypted data
-func (h *RCWService) EncryptRequest(decBytes []byte, reply *[]byte) error {
-	*reply = wrappers.Encrypt(decBytes, globalPassphrase)
+func (h *RCWService) EncryptRequestAndZeroizeDecBytes(decBytes []byte, reply *[]byte) error {
+	*reply = wrappers.EncryptAndZeroizeDecBytesAndPassphrase(decBytes, append([]byte{}, globalPassphrase...)) // pass new slice to avoid zeroizing cached passphrase
 	return nil
 }
 
@@ -39,5 +39,6 @@ func getFileHash(path string) []byte {
 	file, _ := os.Open(path)
 	hash := sha256.New()
 	io.Copy(hash, file)
+	file.Close()
 	return hash.Sum(nil)
 }
