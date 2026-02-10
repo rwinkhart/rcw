@@ -37,8 +37,8 @@ func (h *RCWService) EncryptRequestAndZeroizeDecBytes(decBytes []byte, reply *[]
 // getFileHash returns the SHA256 hash of the file at the given path.
 func getFileHash(path string) []byte {
 	file, _ := os.Open(path)
+	defer file.Close()
 	hash := sha256.New()
 	io.Copy(hash, file)
-	file.Close()
 	return hash.Sum(nil)
 }
