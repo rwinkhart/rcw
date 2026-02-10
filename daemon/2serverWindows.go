@@ -52,9 +52,9 @@ func Start(passphrase []byte) {
 	defer listener.Close()
 	log.Printf("RPC daemon listening on %s", socketPath)
 
-	// capture sigterms to ensure listener is closed
+	// capture termination signals to ensure listener is closed
 	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+	signal.Notify(sigChan, os.Interrupt)
 	// create inactivity timer
 	timer := time.NewTimer(time.Duration(Timeout) * time.Second)
 	killTimer := make(chan struct{})

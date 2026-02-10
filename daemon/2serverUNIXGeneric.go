@@ -38,9 +38,9 @@ func Start(passphrase []byte) {
 	defer listener.Close()
 	log.Printf("RPC daemon listening on unix://%s", socketPath)
 
-	// capture sigterms to ensure listener is closed
+	// capture termination signals to ensure listener is closed
 	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
 		<-sigChan
 		listener.Close()
