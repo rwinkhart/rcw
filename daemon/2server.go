@@ -11,16 +11,16 @@ import (
 var Timeout = 300 // seconds for RPC server timeout; configurable
 
 var daemonHash []byte
-var globalPassphrase []byte
+var globalPassword []byte
 
 // RCWService provides an RPC method.
 type RCWService struct{}
 
 // DecryptRequest is the RPC method that decrypts the incoming data using
-// the global passphrase and returns the decrypted data
+// the global password and returns the decrypted data
 func (h *RCWService) DecryptRequest(encBytes []byte, reply *[]byte) error {
 	var err error
-	*reply, err = wrappers.DecryptAndZeroizePassphrase(encBytes, append([]byte{}, globalPassphrase...)) // pass new slice to avoid zeroizing cached passphrase)
+	*reply, err = wrappers.DecryptAndZeroizePassword(encBytes, append([]byte{}, globalPassword...)) // pass new slice to avoid zeroizing cached password)
 	if err != nil {
 		return err
 	}
@@ -28,9 +28,9 @@ func (h *RCWService) DecryptRequest(encBytes []byte, reply *[]byte) error {
 }
 
 // EncryptRequestAndZeroizeDecBytes is the RPC method that encrypts the incoming data using
-// the global passphrase and returns the encrypted data
+// the global password and returns the encrypted data
 func (h *RCWService) EncryptRequestAndZeroizeDecBytes(decBytes []byte, reply *[]byte) error {
-	*reply = wrappers.EncryptAndZeroizeDecBytesAndPassphrase(decBytes, append([]byte{}, globalPassphrase...)) // pass new slice to avoid zeroizing cached passphrase
+	*reply = wrappers.EncryptAndZeroizeDecBytesAndPassword(decBytes, append([]byte{}, globalPassword...)) // pass new slice to avoid zeroizing cached password
 	return nil
 }
 

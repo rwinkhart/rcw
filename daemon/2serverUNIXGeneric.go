@@ -18,9 +18,9 @@ import (
 
 // Start is the entry point for the RPC server responsible for
 // returning decrypted data to authenticated clients.
-func Start(passphrase []byte) {
-	// store passphrase to be referenced by DecryptRequest method
-	globalPassphrase = passphrase
+func Start(password []byte) {
+	// store password to be referenced by DecryptRequest method
+	globalPassword = password
 
 	// register RCWService with the RPC package
 	if err := rpc.Register(&RCWService{}); err != nil {
@@ -69,9 +69,9 @@ func Start(passphrase []byte) {
 // handleConn verifies the identity of the client.
 // It uses the file descriptor of the connection to get the PID of the client,
 // which is then used to get the path of the client's executable and calculate its hash.
-// The passphrase is only returned if the client's executable hash matches the daemon's hash
+// The password is only returned if the client's executable hash matches the daemon's hash
 // and if the request is coming from the same user.
-// This ensures that only the binary the daemon is embedded in can retrieve the passphrase.
+// This ensures that only the binary the daemon is embedded in can retrieve the password.
 func handleConn(conn net.Conn, sigChan chan os.Signal) {
 	ucred := peercred.Get(conn)
 

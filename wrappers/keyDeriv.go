@@ -21,14 +21,14 @@ const (
 	saltSize2 = 32 // 256 bits, recommended salt size for HKDF
 )
 
-// derivePrimaryKey derives an encryption key from a passphrase using Argon2.
+// derivePrimaryKey derives an encryption key from a password using Argon2.
 // The resulting key is not meant to be used directly for encryption, but rather as a key to derive other keys.
-func derivePrimaryKey(passphrase, salt []byte) []byte {
-	return argon2.IDKey(passphrase, salt, argonTime, argonMemory, argonThreads, keyLen)
+func derivePrimaryKey(password, salt []byte) []byte {
+	return argon2.IDKey(password, salt, argonTime, argonMemory, argonThreads, keyLen)
 }
 
 // deriveSecondaryKey derives a secondary key from the primary key using HKDF.
-// It is meant to be an efficient way to derive multiple keys from a single passphrase.
+// It is meant to be an efficient way to derive multiple keys from a single password.
 func deriveSecondaryKey(primaryKey, salt, info []byte) []byte {
 	h := hkdf.New(sha256.New, primaryKey, salt, info)
 	derivedKey := make([]byte, keyLen)

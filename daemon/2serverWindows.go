@@ -24,9 +24,9 @@ const (
 
 // Start is the entry point for the RPC server responsible for
 // returning decrypted data to authenticated clients.
-func Start(passphrase []byte) {
-	// store passphrase to be referenced by DecryptRequest method
-	globalPassphrase = passphrase
+func Start(password []byte) {
+	// store password to be referenced by DecryptRequest method
+	globalPassword = password
 
 	// register RCWService with the RPC package
 	if err := rpc.Register(&RCWService{}); err != nil {

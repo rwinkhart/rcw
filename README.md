@@ -3,13 +3,13 @@ RCW is a cascading symmetric cryptography agent meant to be embedded within Go p
 
 It encrypts all data with both AES256-GCM and ChaCha20-Poly1305.
 
-Passphrases are securely cached for three minutes and RPC authentication is used to
-ensure that only the binary+user responsible for caching the passphrase can utilize it.
+Passwords are securely cached for three minutes and RPC authentication is used to
+ensure that only the binary+user responsible for caching the password can utilize it.
 This feature is supported on Linux, FreeBSD, MacOS, and Windows. It is disabled if
 built with `-tags=interactive`.
 
 RCW also features a sanity check to ensure no data loss occurs due to a user entering the
-incorrect passphrase during encryption.
+incorrect password during encryption.
 
 Please note that RCW is a work-in-progress and breaking changes should be expected.
 Future versions may not be capable of decrypting the output of the current version.

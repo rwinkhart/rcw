@@ -8,28 +8,28 @@ import (
 	"github.com/rwinkhart/go-boilerplate/security"
 )
 
-// GenSanityCheckAndZeroizePassphrase creates an encrypted file containing known plaintext
+// GenSanityCheckAndZeroizePassword creates an encrypted file containing known plaintext
 // to later be used for ensuring the user does not encrypt data with
-// an incorrect passphrase.
-func GenSanityCheckAndZeroizePassphrase(path string, passphrase []byte) error {
-	err := os.WriteFile(path, EncryptAndZeroizeDecBytesAndPassphrase([]byte("thx4usin'rcw"), passphrase), 0600)
-	security.ZeroizeBytes(passphrase)
+// an incorrect password.
+func GenSanityCheckAndZeroizePassword(path string, password []byte) error {
+	err := os.WriteFile(path, EncryptAndZeroizeDecBytesAndPassword([]byte("thx4usin'rcw"), password), 0600)
+	security.ZeroizeBytes(password)
 	return err
 }
 
 // RunSanityCheck should be run before any encryption operation
-// to ensure the user does not encrypt data with an incorrect passphrase.
+// to ensure the user does not encrypt data with an incorrect password.
 // Failure to perform this check could result in data loss.
-func RunSanityCheck(path string, passphrase []byte) error {
+func RunSanityCheck(path string, password []byte) error {
 	encBytes, err := os.ReadFile(path)
 	if err != nil {
 		return errors.New("Failed to read sanity check file (" + path + ")")
 	}
-	decBytes, err := DecryptAndZeroizePassphrase(encBytes, passphrase)
+	decBytes, err := DecryptAndZeroizePassword(encBytes, password)
 	if err == nil {
 		if bytes.Equal(decBytes, []byte("thx4usin'rcw")) {
 			return nil
 		}
 	}
-	return errors.New("sanity check failed (likely due to inconsistent passphrase)")
+	return errors.New("sanity check failed (likely due to inconsistent password)")
 }
