@@ -25,7 +25,9 @@ func RunSanityCheck(path string, password []byte) error {
 	if err != nil {
 		return errors.New("Failed to read sanity check file (" + path + ")")
 	}
-	decBytes, err := DecryptAndZeroizePassword(encBytes, password)
+
+	// avoid zeroizing password, as this function expects the user to use the password after running it
+	decBytes, err := DecryptAndZeroizePassword(encBytes, append([]byte{}, password...))
 	if err == nil {
 		if bytes.Equal(decBytes, []byte("thx4usin'rcw")) {
 			return nil
