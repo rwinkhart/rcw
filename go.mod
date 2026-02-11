@@ -4,7 +4,7 @@ go 1.25.7
 
 require (
 	github.com/Microsoft/go-winio v0.6.2
-	github.com/rwinkhart/go-boilerplate v0.2.3-0.20260211013046-29315c4b764f
+	github.com/rwinkhart/go-boilerplate v0.2.3-0.20260211031648-26686374bd0c
 	github.com/rwinkhart/peercred-mini v0.1.3
 	golang.org/x/crypto v0.48.0
 	golang.org/x/sys v0.41.0

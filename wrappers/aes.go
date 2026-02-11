@@ -24,7 +24,6 @@ func encryptAES(decBytes, key2, salt2 []byte) []byte {
 
 	// generate a random nonce
 	nonce := getRandomBytes(nonceSizeAES)
-	defer security.ZeroizeBytes(nonce)
 
 	// encrypt the data
 	ciphertext := aesGCM.Seal(nil, nonce, decBytes, nil)

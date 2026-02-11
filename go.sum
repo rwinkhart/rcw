@@ -1,7 +1,5 @@
-github.com/rwinkhart/go-boilerplate v0.2.3-0.20260210031547-48e6abea8b2f h1:QloiAudLU8WAVs+loMU4ZiSd8ve0eiSkGtFhQUibhTw=
-github.com/rwinkhart/go-boilerplate v0.2.3-0.20260210031547-48e6abea8b2f/go.mod h1:ES13A2r9fnCVfyezwMBgY/RgA4pOIudOUXz3Jk/ikes=
-github.com/rwinkhart/go-boilerplate v0.2.3-0.20260211013046-29315c4b764f h1:ITbAql2EG50U0Z9JnPqupvdZ5zp0i44LnqZUsdz6DNc=
-github.com/rwinkhart/go-boilerplate v0.2.3-0.20260211013046-29315c4b764f/go.mod h1:ES13A2r9fnCVfyezwMBgY/RgA4pOIudOUXz3Jk/ikes=
+github.com/rwinkhart/go-boilerplate v0.2.3-0.20260211031648-26686374bd0c h1:N8rXbv1duCEF4qyiSx0hyb03A6AxWZ9w7mHAgM0kjUs=
+github.com/rwinkhart/go-boilerplate v0.2.3-0.20260211031648-26686374bd0c/go.mod h1:ES13A2r9fnCVfyezwMBgY/RgA4pOIudOUXz3Jk/ikes=
 github.com/rwinkhart/go-winio v0.1.1 h1:kAJKiqneR7cUR01Wn5/doAAV4kOGTEGPug4oinXc5N4=
 github.com/rwinkhart/go-winio v0.1.1/go.mod h1:ZWa7ssZJT30CCDGJ7fk/2SBTq9BIQrrVjrcss0UW2s0=
 github.com/rwinkhart/peercred-mini v0.1.3 h1:Pbyk/f4oXVtX38uuZAyxZZ8ZzRImL6WWgCr0pSktCKU=

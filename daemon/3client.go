@@ -23,19 +23,21 @@ func GetDec(encBytes []byte) []byte {
 	return decBytes
 }
 
-// GetEncAndZeroizeDecBytes requests the RCW daemon to encrypt the given data.
+// GetEnc requests the RCW daemon to encrypt the given data.
 // It returns the encrypted data.
-func GetEncAndZeroizeDecBytes(decBytes []byte) []byte {
+func GetEnc(decBytes []byte, zeroizeDecBytes bool) []byte {
 	conn, client := connectToDaemon()
 	defer conn.Close()
 	defer client.Close()
 
 	// request encBytes from the RPC server
 	var encBytes []byte
-	err := client.Call("RCWService.EncryptRequestAndZeroizeDecBytes", decBytes, &encBytes)
-	security.ZeroizeBytes(decBytes)
+	err := client.Call("RCWService.EncryptRequest", decBytes, &encBytes)
+	if zeroizeDecBytes {
+		security.ZeroizeBytes(decBytes)
+	}
 	if err != nil {
-		log.Fatalf("Error calling RCWService.EncryptRequestAndZeroizeDecBytes: %v", err)
+		log.Fatalf("Error calling RCWService.EncryptRequest: %v", err)
 	}
 	return encBytes
 }

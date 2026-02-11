@@ -18,7 +18,6 @@ func encryptCha(decBytes, key2, salt2 []byte) []byte {
 
 	// generate a random nonce
 	nonce := getRandomBytes(nonceSizeCha)
-	defer security.ZeroizeBytes(nonce)
 
 	// encrypt the data
 	ciphertext := stream.Seal(nil, nonce, decBytes, nil)

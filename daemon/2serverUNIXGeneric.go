@@ -13,6 +13,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/rwinkhart/go-boilerplate/security"
 	"github.com/rwinkhart/peercred-mini"
 )
 
@@ -44,6 +45,7 @@ func Start(password []byte) {
 	go func() {
 		<-sigChan
 		listener.Close()
+		security.ZeroizeBytes(globalPassword)
 		os.Exit(0)
 	}()
 
@@ -56,6 +58,7 @@ func Start(password []byte) {
 			if err.(net.Error).Timeout() {
 				log.Println(strconv.Itoa(Timeout) + " seconds have passed without any connections. Exiting...")
 				listener.Close()
+				security.ZeroizeBytes(globalPassword)
 				os.Exit(0)
 			}
 			log.Printf("Accept error: %v", err)
@@ -84,7 +87,7 @@ func handleConn(conn net.Conn, sigChan chan os.Signal) {
 		// invalid client; close the connection w/o a response,
 		// log the client's path, and kill the daemon
 		conn.Close()
-		log.Printf("Request received from invalid client: PID(%d), UID(%s), Path(%s)", ucred.PID, ucred.UID, callingBinPath) // TODO log to file
-		sigChan <- syscall.SIGTERM
+		log.Printf("Request received from invalid client: PID(%d), UID(%s), Path(%s)", ucred.PID, ucred.UID, callingBinPath)
+		sigChan <- syscall.SIGTERM // this zeroizes globalPassword and triggers os.Exit(0)
 	}
 }

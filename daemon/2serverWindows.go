@@ -10,10 +10,10 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
-	"syscall"
 	"time"
 
 	"github.com/Microsoft/go-winio"
+	"github.com/rwinkhart/go-boilerplate/security"
 	"github.com/rwinkhart/peercred-mini"
 	"golang.org/x/sys/windows"
 )
@@ -63,11 +63,13 @@ func Start(password []byte) {
 		case <-timer.C:
 			log.Println(strconv.Itoa(Timeout) + " seconds have passed without any connections. Exiting...")
 			listener.Close()
+			security.ZeroizeBytes(globalPassword)
 			os.Exit(0)
 		case <-killTimer:
 			return
 		case <-sigChan:
 			listener.Close()
+			security.ZeroizeBytes(globalPassword)
 			os.Exit(0)
 		}
 	}()
@@ -108,8 +110,7 @@ func handleConn(conn net.Conn, sigChan chan os.Signal) {
 		// invalid client; close the connection w/o a response,
 		// log the client's path, and kill the daemon
 		conn.Close()
-		log.Printf("Request received from invalid client: PID(%d), UID(%s), Path(%s)", ucred.PID, ucred.UID, callingBinPath) // TODO log to file
-		sigChan <- syscall.SIGTERM
-		os.Exit(2)
+		log.Printf("Request received from invalid client: PID(%d), UID(%s), Path(%s)", ucred.PID, ucred.UID, callingBinPath)
+		sigChan <- os.Interrupt // this zeroizes globalPassword and triggers os.Exit(0)
 	}
 }

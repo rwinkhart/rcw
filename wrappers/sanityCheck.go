@@ -4,16 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"os"
-
-	"github.com/rwinkhart/go-boilerplate/security"
 )
 
-// GenSanityCheckAndZeroizePassword creates an encrypted file containing known plaintext
+// GenSanityCheck creates an encrypted file containing known plaintext
 // to later be used for ensuring the user does not encrypt data with
 // an incorrect password.
-func GenSanityCheckAndZeroizePassword(path string, password []byte) error {
-	err := os.WriteFile(path, EncryptAndZeroizeDecBytesAndPassword([]byte("thx4usin'rcw"), password), 0600)
-	security.ZeroizeBytes(password)
+func GenSanityCheck(path string, password []byte, zeroizePassword bool) error {
+	err := os.WriteFile(path, Encrypt([]byte("thx4usin'rcw"), password, false, zeroizePassword), 0600)
 	return err
 }
 
@@ -25,9 +22,7 @@ func RunSanityCheck(path string, password []byte) error {
 	if err != nil {
 		return errors.New("Failed to read sanity check file (" + path + ")")
 	}
-
-	// avoid zeroizing password, as this function expects the user to use the password after running it
-	decBytes, err := DecryptAndZeroizePassword(encBytes, append([]byte{}, password...))
+	decBytes, err := Decrypt(encBytes, password, false)
 	if err == nil {
 		if bytes.Equal(decBytes, []byte("thx4usin'rcw")) {
 			return nil

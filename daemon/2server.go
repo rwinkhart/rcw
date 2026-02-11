@@ -20,17 +20,17 @@ type RCWService struct{}
 // the global password and returns the decrypted data
 func (h *RCWService) DecryptRequest(encBytes []byte, reply *[]byte) error {
 	var err error
-	*reply, err = wrappers.DecryptAndZeroizePassword(encBytes, append([]byte{}, globalPassword...)) // pass new slice to avoid zeroizing cached password)
+	*reply, err = wrappers.Decrypt(encBytes, globalPassword, false)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// EncryptRequestAndZeroizeDecBytes is the RPC method that encrypts the incoming data using
+// EncryptRequest is the RPC method that encrypts the incoming data using
 // the global password and returns the encrypted data
-func (h *RCWService) EncryptRequestAndZeroizeDecBytes(decBytes []byte, reply *[]byte) error {
-	*reply = wrappers.EncryptAndZeroizeDecBytesAndPassword(decBytes, append([]byte{}, globalPassword...)) // pass new slice to avoid zeroizing cached password
+func (h *RCWService) EncryptRequest(decBytes []byte, reply *[]byte) error {
+	*reply = wrappers.Encrypt(decBytes, globalPassword, true, false)
 	return nil
 }
 
