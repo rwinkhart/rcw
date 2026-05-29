@@ -2,4 +2,4 @@
 
 package daemon
 
-const pidPathFile = "execname"
+const pidPathFile = "path/a.out"

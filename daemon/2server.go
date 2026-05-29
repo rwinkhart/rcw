@@ -2,6 +2,7 @@ package daemon
 
 import (
 	"crypto/sha256"
+	"errors"
 	"io"
 	"os"
 
@@ -35,10 +36,13 @@ func (h *RCWService) EncryptRequest(decBytes []byte, reply *[]byte) error {
 }
 
 // getFileHash returns the SHA256 hash of the file at the given path.
-func getFileHash(path string) []byte {
-	file, _ := os.Open(path)
+func getFileHash(path string) ([]byte, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, errors.New("unable to read path (" + path + ") for hashing: " + err.Error())
+	}
 	defer file.Close()
 	hash := sha256.New()
 	io.Copy(hash, file)
-	return hash.Sum(nil)
+	return hash.Sum(nil), nil
 }

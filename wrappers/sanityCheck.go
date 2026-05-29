@@ -20,7 +20,7 @@ func GenSanityCheck(path string, password []byte, zeroizePassword bool) error {
 func RunSanityCheck(path string, password []byte) error {
 	encBytes, err := os.ReadFile(path)
 	if err != nil {
-		return errors.New("Failed to read sanity check file (" + path + ")")
+		return errors.New("unable to read sanity check file (" + path + "): " + err.Error())
 	}
 	decBytes, err := Decrypt(encBytes, password, false)
 	if err == nil {

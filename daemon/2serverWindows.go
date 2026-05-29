@@ -29,12 +29,16 @@ func Start(password []byte) {
 	globalPassword = password
 
 	// register RCWService with the RPC package
-	if err := rpc.Register(&RCWService{}); err != nil {
+	err := rpc.Register(&RCWService{})
+	if err != nil {
 		log.Fatalf("Error registering RPC service: %v", err)
 	}
 
 	// store the hash of the daemon binary
-	daemonHash = getFileHash(binPath)
+	daemonHash, err = getFileHash(binPath)
+	if err != nil {
+		log.Fatalf("Error hashing daemon binary: %v", err)
+	}
 
 	// configure the named pipe
 	pipeConfig := &winio.PipeConfig{
@@ -104,7 +108,15 @@ func handleConn(conn net.Conn, sigChan chan os.Signal) {
 
 	// check if the RPC call is coming from an identical binary and from the same user
 	callingBinPath := pidToPath(uint32(ucred.PID))
-	if ucred.UID == user.User.Sid.String() && bytes.Equal(getFileHash(callingBinPath), daemonHash) {
+	callingBinHash, err := getFileHash(callingBinPath)
+	if err != nil {
+		// calling binary hash failure
+		conn.Close()
+		log.Printf("Failed to hash calling binary: PID(%d), UID(%s), Path(%s) - %v", ucred.PID, ucred.UID, callingBinPath, err)
+		sigChan <- os.Interrupt // this zeroizes globalPassword and triggers os.Exit(0)
+		return                  // explicitly return to avoid race
+	}
+	if ucred.UID == user.User.Sid.String() && bytes.Equal(callingBinHash, daemonHash) {
 		rpc.ServeConn(conn)
 	} else {
 		// invalid client; close the connection w/o a response,
