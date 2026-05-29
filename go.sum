@@ -2,8 +2,8 @@ github.com/rwinkhart/go-boilerplate v0.3.1 h1:vkVRuptO2s1yPzzwpvtiiB0c/hPB6yr0p1
 github.com/rwinkhart/go-boilerplate v0.3.1/go.mod h1:ES13A2r9fnCVfyezwMBgY/RgA4pOIudOUXz3Jk/ikes=
 github.com/rwinkhart/go-winio v0.1.1 h1:kAJKiqneR7cUR01Wn5/doAAV4kOGTEGPug4oinXc5N4=
 github.com/rwinkhart/go-winio v0.1.1/go.mod h1:ZWa7ssZJT30CCDGJ7fk/2SBTq9BIQrrVjrcss0UW2s0=
-github.com/rwinkhart/peercred-mini v0.1.4 h1:93+phjLknvJadEd2cu/ZPPWdfRSPOwFJzDBEn4ZtWVc=
-github.com/rwinkhart/peercred-mini v0.1.4/go.mod h1:E8eApo/izzmq4nGGR+kpJ0ZLAXjofnVRMGCeVMPQ/Ik=
+github.com/rwinkhart/peercred-mini v0.1.5 h1:9sBR0ascteCJfzfhv7Gq/juqu7OOU+AphiEIG1+LcWA=
+github.com/rwinkhart/peercred-mini v0.1.5/go.mod h1:C73IeDteQwsKp1+PDdUBj4FC6dTziAJNbQsVDZSWE+M=
 github.com/rwinkhart/sys v0.45.0 h1:HXZL0SuyToqKkvakaUuRAdH8sPUHelfO6q4PQRpL26Q=
 github.com/rwinkhart/sys v0.45.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
 golang.org/x/crypto v0.52.0 h1:RMs7fP2rXdep0CftQlK8Uf+kibLm7qkCcradZWYz988=
